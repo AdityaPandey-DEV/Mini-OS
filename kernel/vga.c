@@ -99,6 +99,7 @@ void vga_set_cursor(int x, int y) {
 }
 
 void vga_get_cursor(int* x, int* y) {
-    if (x) *x = cursor_x; if (y) *y = cursor_y;
+    if (x) *x = cursor_x;
+    if (y) *y = cursor_y;
 }
 
