@@ -3,6 +3,7 @@
 #include "lib.h"
 #include "timer.h"
 #include "fs.h"
+#include "game.h"
 
 #define MAX_LINE 128
 #define MAX_HISTORY 16
@@ -13,7 +14,7 @@ static char history[MAX_HISTORY][MAX_LINE];
 static int hist_count = 0;
 static int hist_pos = -1;
 
-static const char* cmds[] = {"help","echo","clear","about","mem","time","uptime","sysinfo","ls","cat"};
+static const char* cmds[] = {"help","echo","clear","about","mem","time","uptime","sysinfo","ls","cat","tictactoe"};
 
 static void prompt() {
     vga_write("minios> ");
@@ -85,6 +86,10 @@ static void exec_cmd(const char* cmdline) {
         const char* name = args;
         if (!*name){ vga_write("Usage: cat <FILE>\n"); }
         else { const char* d = fs_read(name); if (d) vga_write(d); else vga_write("Not found\n"); }
+    } else if (strcmp(cmd, "tictactoe") == 0) {
+        game_tictactoe();
+        // redraw prompt after returning from game
+        prompt();
     } else if (*cmd) {
         vga_write("Unknown: "); vga_write(cmd); vga_putc('\n');
     }

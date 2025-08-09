@@ -55,8 +55,11 @@ $(BUILD)/fs.o: $(KERNEL)/fs.c | $(BUILD)
 $(BUILD)/lib.o: $(KERNEL)/lib.c | $(BUILD)
 	$(CC) $(CFLAGS) -I$(KERNEL) -c -o $@ $<
 
-$(BUILD)/kernel.elf: $(BUILD)/kernel_entry.o $(BUILD)/kernel.o $(BUILD)/vga.o $(BUILD)/idt.o $(BUILD)/idt_load.o $(BUILD)/isr.o $(BUILD)/timer.o $(BUILD)/keyboard.o $(BUILD)/shell.o $(BUILD)/fs.o $(BUILD)/lib.o $(KERNEL)/linker.ld
-	$(LD) -m elf_i386 -T $(KERNEL)/linker.ld -o $@ $(BUILD)/kernel_entry.o $(BUILD)/kernel.o $(BUILD)/vga.o $(BUILD)/idt.o $(BUILD)/idt_load.o $(BUILD)/isr.o $(BUILD)/timer.o $(BUILD)/keyboard.o $(BUILD)/shell.o $(BUILD)/fs.o $(BUILD)/lib.o
+$(BUILD)/game.o: $(KERNEL)/game.c | $(BUILD)
+	$(CC) $(CFLAGS) -I$(KERNEL) -c -o $@ $<
+
+$(BUILD)/kernel.elf: $(BUILD)/kernel_entry.o $(BUILD)/kernel.o $(BUILD)/vga.o $(BUILD)/idt.o $(BUILD)/idt_load.o $(BUILD)/isr.o $(BUILD)/timer.o $(BUILD)/keyboard.o $(BUILD)/shell.o $(BUILD)/fs.o $(BUILD)/lib.o $(BUILD)/game.o $(KERNEL)/linker.ld
+	$(LD) -m elf_i386 -T $(KERNEL)/linker.ld -o $@ $(BUILD)/kernel_entry.o $(BUILD)/kernel.o $(BUILD)/vga.o $(BUILD)/idt.o $(BUILD)/idt_load.o $(BUILD)/isr.o $(BUILD)/timer.o $(BUILD)/keyboard.o $(BUILD)/shell.o $(BUILD)/fs.o $(BUILD)/lib.o $(BUILD)/game.o
 
 $(BUILD)/kernel.bin: $(BUILD)/kernel.elf
 	$(OBJCOPY) -O binary $< $@
