@@ -12,3 +12,5 @@ _start:
     hlt
     jmp .hang
 
+SECTION .note.GNU-stack noalloc noexec nowrite
+

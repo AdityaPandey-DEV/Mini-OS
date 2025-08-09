@@ -17,3 +17,5 @@ idt_load:
     pop ebp
     ret
 
+SECTION .note.GNU-stack noalloc noexec nowrite
+

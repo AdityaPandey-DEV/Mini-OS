@@ -37,7 +37,8 @@ static char check_winner(void) {
 }
 
 static void reset(void) {
-    for (int i=0;i<9;i++) board[i]=0; current='X';
+    for (int i=0;i<9;i++) board[i]=0;
+    current='X';
 }
 
 void game_tictactoe(void) {

@@ -112,21 +112,6 @@ static void accept_line() {
     prompt();
 }
 
-static void history_up() {
-    if (hist_count==0) return;
-    if (hist_pos+1 < hist_count) hist_pos++;
-    strcpy(line, history[hist_count-1-hist_pos]);
-    cursor = (int)strlen(line);
-    redraw_line();
-}
-
-static void history_down() {
-    if (hist_pos <= 0) { hist_pos=-1; cursor=0; line[0]=0; redraw_line(); return; }
-    hist_pos--;
-    strcpy(line, history[hist_count-1-hist_pos]);
-    cursor = (int)strlen(line);
-    redraw_line();
-}
 
 static void autocomplete() {
     // simple: find first command starting with current line
