@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniOS Web Terminal</title>
+  <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css" />
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; height: 100vh; display: flex; flex-direction: column; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    header { padding: 8px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(0,0,0,.1); }
+    #term { flex: 1; }
+    button, a.btn { padding: 6px 10px; border: 1px solid #8884; border-radius: 6px; background: #eee; color: #111; text-decoration: none; }
+    .spacer { flex: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>MiniOS</strong>
+    <span id="status">connecting…</span>
+    <div class="spacer"></div>
+    <a class="btn" href="/download/minios.img">Download OS Image</a>
+    <button id="theme">Toggle Theme</button>
+  </header>
+  <div id="term"></div>
+  <script src="https://unpkg.com/xterm/lib/xterm.js"></script>
+  <script>
+    const term = new Terminal({
+      cursorBlink: true,
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+      theme: { background: '#101216' }
+    });
+    term.open(document.getElementById('term'));
+
+    function fit() {
+      const cols = Math.floor(term.element.clientWidth / term._core._renderService.dimensions.actualCellWidth);
+      const rows = Math.floor(term.element.clientHeight / term._core._renderService.dimensions.actualCellHeight);
+      if (cols > 0 && rows > 0) term.resize(cols, rows);
+    }
+    window.addEventListener('resize', () => setTimeout(fit, 50));
+    setTimeout(fit, 100);
+
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const ws = new WebSocket(`${proto}://${location.host}/ws`);
+    const status = document.getElementById('status');
+
+    ws.binaryType = 'arraybuffer';
+    ws.onopen = () => { status.textContent = 'connected'; };
+    ws.onclose = () => { status.textContent = 'disconnected'; };
+    ws.onmessage = (ev) => {
+      const data = typeof ev.data === 'string' ? ev.data : new TextDecoder().decode(ev.data);
+      term.write(data);
+    };
+    term.onData((data) => ws.readyState === 1 && ws.send(data));
+
+    document.getElementById('theme').onclick = () => {
+      const dark = document.documentElement.dataset.theme !== 'light';
+      if (dark) { document.documentElement.dataset.theme = 'light'; term.options.theme = { background: '#FFFFFF', foreground: '#000000' }; }
+      else { document.documentElement.dataset.theme = 'dark'; term.options.theme = { background: '#101216', foreground: '#E6E6E6' }; }
+      setTimeout(fit, 10);
+    };
+  </script>
+</body>
+</html>
+

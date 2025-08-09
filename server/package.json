@@ -1,0 +1,16 @@
+{
+  "name": "minios-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "NODE_ENV=development node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-ws": "^5.0.2",
+    "ws": "^8.18.0",
+    "uuid": "^9.0.1"
+  }
+}
