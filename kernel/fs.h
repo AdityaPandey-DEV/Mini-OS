@@ -1,6 +1,6 @@
 #pragma once
-#include cstdint.he
-#include cstddef.he
+#include <stdint.h>
+#include <stddef.h>
 
 // Tiny in-memory FS for demo ls/cat
 struct file { const char* name; const char* data; };
