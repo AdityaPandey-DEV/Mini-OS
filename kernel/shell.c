@@ -60,22 +60,22 @@ static void exec_cmd(const char* cmdline) {
     } else if (strcmp(cmd, "mem") == 0) {
         vga_write("Mem: demo only.\n");
     } else if (strcmp(cmd, "time") == 0) {
-        uint64_t ms = timer_uptime_ms();
+        uint32_t ms = timer_uptime_ms();
         char tmp[32];
         // very small itoa
-        int i=0; uint64_t t=ms; char rev[32]; if(t==0) rev[i++]='0'; while(t){ rev[i++]='0'+(t%10); t/=10; }
+        int i=0; uint32_t t=ms; char rev[32]; if(t==0) rev[i++]='0'; while(t){ rev[i++]='0'+(t%10U); t/=10U; }
         int j=0; while(i--) tmp[j++]=rev[i]; tmp[j]=0;
         vga_write(tmp); vga_write(" ms\n");
     } else if (strcmp(cmd, "uptime") == 0) {
-        uint64_t ms = timer_uptime_ms();
-        uint64_t s = ms/1000ULL; uint64_t m = s/60ULL; uint64_t h = m/60ULL;
-        s%=60; m%=60;
+        uint32_t ms = timer_uptime_ms();
+        uint32_t s = ms/1000U; uint32_t m = s/60U; uint32_t h = m/60U;
+        s%=60U; m%=60U;
         // crude print
         char bufh[32]; char bufm[32]; char bufs[32];
-        int i; uint64_t t; char r[32]; int k;
-        k=0; t=h; if(t==0) r[k++]='0'; while(t){ r[k++]='0'+(t%10); t/=10; } i=0; while(k--) bufh[i++]=r[k]; bufh[i]=0;
-        k=0; t=m; if(t==0) r[k++]='0'; while(t){ r[k++]='0'+(t%10); t/=10; } i=0; while(k--) bufm[i++]=r[k]; bufm[i]=0;
-        k=0; t=s; if(t==0) r[k++]='0'; while(t){ r[k++]='0'+(t%10); t/=10; } i=0; while(k--) bufs[i++]=r[k]; bufs[i]=0;
+        int i; uint32_t t; char r[32]; int k;
+        k=0; t=h; if(t==0) r[k++]='0'; while(t){ r[k++]='0'+(t%10U); t/=10U; } i=0; while(k--) bufh[i++]=r[k]; bufh[i]=0;
+        k=0; t=m; if(t==0) r[k++]='0'; while(t){ r[k++]='0'+(t%10U); t/=10U; } i=0; while(k--) bufm[i++]=r[k]; bufm[i]=0;
+        k=0; t=s; if(t==0) r[k++]='0'; while(t){ r[k++]='0'+(t%10U); t/=10U; } i=0; while(k--) bufs[i++]=r[k]; bufs[i]=0;
         vga_write(bufh); vga_write("h "); vga_write(bufm); vga_write("m "); vga_write(bufs); vga_write("s\n");
     } else if (strcmp(cmd, "sysinfo") == 0) {
         vga_write("CPU: 32-bit protected mode\nPIC: remapped, PIT 100Hz\n");
